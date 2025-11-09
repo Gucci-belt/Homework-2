@@ -2,6 +2,6 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY calculator.py .
+COPY app.py .
 
-CMD ["python", "calculator.py"]
+CMD ["python", "app.py"]
