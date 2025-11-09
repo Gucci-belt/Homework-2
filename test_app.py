@@ -3,7 +3,7 @@
 ไฟล์นี้คือ "ผู้คุมกฎ" ที่เราจะไม่แตะต้องอีกเลย
 """
 import unittest
-import app  # Import โค้ดหลักของเรา (app.py)
+import app  
 
 class TestApp(unittest.TestCase):
     
