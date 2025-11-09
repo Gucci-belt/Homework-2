@@ -1,11 +1,7 @@
 """
-Version 2: AI Fix (with new Hardcoding Bug)
-AI แก้ไขโดยการ "Hardcode" คำตอบให้ Bob
-แต่ลืมแก้ไขกรณีทั่วไป
+Version 3: The Final, Correct Code
+AI เข้าใจแล้ว และแก้ไข Logic ทั่วไปให้ถูกต้อง
 """
 def greet(name):
-    if name == "Bob":
-        return "Hello, Bob!"  # <--- AI แก้ไข "Bob" ถูกต้อง
-    else:
-        # บั๊กเก่ายังคงอยู่สำหรับ "Alice"
-        return f"Hi, {name}!" # <--- BUG!
+    # นี่คือโค้ดที่ถูกต้อง แก้ไขที่ต้นตอ
+    return f"Hello, {name}!"
