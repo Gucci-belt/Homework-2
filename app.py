@@ -4,4 +4,4 @@ BUG: ข้อความทักทายผิด (ใช้ "Hi" แทน 
 """
 def greet(name):
     
-    return f"Hello, {name}!" 
+    return f"Hi, {name}!" 
