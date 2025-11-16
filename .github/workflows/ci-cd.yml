@@ -1,4 +1,4 @@
-name: CI-CD Pipeline (Reusable Validator)
+name: CI-CD Pipeline (Unittest Validator)
 
 on:
   push:
@@ -13,25 +13,21 @@ jobs:
       
       - name: 1. Checkout Code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: 2. Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: 3. (Validation) SonarCloud Scan [Reusable]
-        # (นี่คือขั้นตอนเดิมของคุณ)
-        uses: SonarSource/sonarqube-scan-action@v6
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      # --- 🔼 สิ้นสุดขั้นตอนใหม่ 🔼 ---
+      # --- 🔽 นี่คือ "หัวใจ" 🔽 ---
+      # (ขั้นตอนนี้จะ "พัง" 🔴 ถ้า Logic ผิด)
+      - name: 3. (Validation) Run Unit Tests
+        run: python -m unittest test_app.py
+      # --- 🔼 สิ้นสุดการแก้ไข 🔼 ---
+        
+      # --- ขั้นตอน 4-6 จะทำงาน "ต่อเมื่อ" ขั้น 3 (Sonar) "ผ่าน" 🟢 เท่านั้น ---
 
       - name: 4. Generate Build Number
-        # (ขั้นตอนนี้จะ "ไม่ถูกรัน" ถ้า Sonar (ขั้น 3.6) "พัง" 🔴)
         id: build_number
         run: echo "VERSION_NUMBER=1.0.$(git rev-list --count HEAD)" >> $GITHUB_OUTPUT
         
