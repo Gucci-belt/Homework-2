@@ -14,37 +14,31 @@ jobs:
       - name: 1. Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # (Sonar ต้องการอันนี้)
+          fetch-depth: 0
 
       - name: 2. Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      # --- ขั้นตอน "ส่ง" (Send) ---
-      # (ขั้นตอนนี้จะ "ผ่าน" 🟢 ถ้า "ส่ง" สำเร็จ)
+      # --- นี่คือ "หัวใจ" (ตัวเดียวจบ) ---
+      #
+      # เรา "เพิ่ม" with: args: เข้าไป
+      # เพื่อ "บังคับ" ให้ขั้นตอนนี้ "รอ" (wait=true) ผลจาก Sonar
+      # ถ้า Sonar "พัง" 🔴 -> ขั้นตอนนี้ก็จะ "พัง" 🔴
+      #
       - name: 3. (Validation) SonarCloud Scan [Reusable]
         uses: SonarSource/sonarqube-scan-action@v6 # (ใช้ v6 ที่เสถียร)
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # (ถ้าคุณใช้ Option B ให้ใส่ 'with: args:' ไว้ตรงนี้)
-        
-      # --- 🔽 นี่คือ "หัวใจ" ที่จะทำให้ "พัง" 🔽 ---
-      #
-      # "ด่านคุมคุณภาพ" (Quality Gate)
-      # มันจะ "หยุดรอ" ให้ Sonar วิเคราะห์ (1-2 นาที)
-      # แล้ว "ดึงผล" (เกรด A/F) กลับมา
-      #
-      - name: 3.5 (Validation) Sonar Quality Gate
-        uses: SonarSource/sonarcloud-quality-gate-action@master # <-- (นี่คือ "ตัวจริง" ครับ)
-        timeout-minutes: 5 # (ตั้งเวลารอ 5 นาที)
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          
-      # --- 🔼 สิ้นสุดขั้นตอน "ด่าน" 🔼 ---
+        with: # <--- "เพิ่ม" ส่วนนี้
+          args: > # <--- "เพิ่ม" ส่วนนี้
+            -Dsonar.qualitygate.wait=true
 
-      # --- ขั้นตอน 4-6 จะทำงาน "ต่อเมื่อ" ขั้น 3.5 (Gate) "ผ่าน" 🟢 เท่านั้น ---
+      # --- 🔼 สิ้นสุดการแก้ไข 🔼 ---
+        
+      # --- ขั้นตอน 4-6 จะทำงาน "ต่อเมื่อ" ขั้น 3 (Sonar) "ผ่าน" 🟢 เท่านั้น ---
 
       - name: 4. Generate Build Number
         id: build_number
