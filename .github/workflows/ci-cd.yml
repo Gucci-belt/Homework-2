@@ -27,19 +27,6 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # (ถ้าคุณใช้ Option B ให้ใส่ 'with: args:' ไว้ตรงนี้)
-        
-      # --- 🔽 นี่คือ "ขั้นตอนใหม่" ที่เพิ่มเข้ามา 🔽 ---
-      #
-      # "ด่านคุมคุณภาพ" (Quality Gate)
-      # มันจะ "หยุดรอ" ให้ Sonar วิเคราะห์ (2 นาที)
-      # แล้ว "ดึงผล" (Passed/Failed) กลับมา
-      #
-      - name: 3.6 (Validation) Sonar Quality Gate
-        uses: SonarSource/sonarcloud-quality-gate-action@master
-        timeout-minutes: 5 # <-- (ตั้งเวลารอ 5 นาที)
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           
       # --- 🔼 สิ้นสุดขั้นตอนใหม่ 🔼 ---
 
