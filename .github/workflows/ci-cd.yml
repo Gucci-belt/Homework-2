@@ -1,4 +1,4 @@
-name: CI-CD Pipeline (Reusable Validator)
+name: CI-CD Pipeline (Unittest Validator)
 
 on:
   push:
@@ -13,29 +13,16 @@ jobs:
       
       - name: 1. Checkout Code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: 2. Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      # --- นี่คือ "หัวใจ" (ตัวเดียวจบ) ---
-      #
-      # เรา "เพิ่ม" with: args: เข้าไป
-      # เพื่อ "บังคับ" ให้ขั้นตอนนี้ "รอ" (wait=true) ผลจาก Sonar
-      # ถ้า Sonar "พัง" 🔴 -> ขั้นตอนนี้ก็จะ "พัง" 🔴
-      #
-      - name: 3. (Validation) SonarCloud Scan [Reusable]
-        uses: SonarSource/sonarqube-scan-action@v6 # (ใช้ v6 ที่เสถียร)
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with: # <--- "เพิ่ม" ส่วนนี้
-          args: > # <--- "เพิ่ม" ส่วนนี้
-            -Dsonar.qualitygate.wait=true
-
+      # --- 🔽 นี่คือ "หัวใจ" 🔽 ---
+      # (ขั้นตอนนี้จะ "พัง" 🔴 ถ้า Logic ผิด)
+      - name: 3. (Validation) Run Unit Tests
+        run: python -m unittest test_app.py
       # --- 🔼 สิ้นสุดการแก้ไข 🔼 ---
         
       # --- ขั้นตอน 4-6 จะทำงาน "ต่อเมื่อ" ขั้น 3 (Sonar) "ผ่าน" 🟢 เท่านั้น ---
