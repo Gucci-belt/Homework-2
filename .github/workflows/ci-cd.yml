@@ -14,27 +14,37 @@ jobs:
       - name: 1. Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # <--- (สำคัญมากสำหรับ Sonar)
+          fetch-depth: 0
 
       - name: 2. Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      # --- นี่คือ "หัวใจ" ใหม่ (Reusable) ---
-      # (เราลบ "unittest" ออกแล้ว)
-      # 
-      # ขั้นตอนนี้จะ "พัง" 🔴 ถ้า Sonar ตรวจเจอ "Code Smell" (v2)
-      # และจะ "ผ่าน" 🟢 ถ้าโค้ด "สะอาด" (v3)
       - name: 3. (Validation) SonarCloud Scan [Reusable]
-        uses: SonarSource/sonarqube-scan-action@master
+        # (นี่คือขั้นตอนเดิมของคุณ)
+        uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      # --- ขั้นตอนที่ 4-6 จะทำงาน "ต่อเมื่อ" Sonar (Step 3) ผ่านเท่านั้น ---
+        # (ถ้าคุณใช้ Option B ให้ใส่ 'with: args:' ไว้ตรงนี้)
+        
+      # --- 🔽 นี่คือ "ขั้นตอนใหม่" ที่เพิ่มเข้ามา 🔽 ---
+      #
+      # "ด่านคุมคุณภาพ" (Quality Gate)
+      # มันจะ "หยุดรอ" ให้ Sonar วิเคราะห์ (2 นาที)
+      # แล้ว "ดึงผล" (Passed/Failed) กลับมา
+      #
+      - name: 3.6 (Validation) Sonar Quality Gate
+        uses: SonarSource/sonarcloud-quality-gate-action@master
+        timeout-minutes: 5 # <-- (ตั้งเวลารอ 5 นาที)
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          
+      # --- 🔼 สิ้นสุดขั้นตอนใหม่ 🔼 ---
 
       - name: 4. Generate Build Number
+        # (ขั้นตอนนี้จะ "ไม่ถูกรัน" ถ้า Sonar (ขั้น 3.6) "พัง" 🔴)
         id: build_number
         run: echo "VERSION_NUMBER=1.0.$(git rev-list --count HEAD)" >> $GITHUB_OUTPUT
         
