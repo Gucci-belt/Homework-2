@@ -1,7 +1,5 @@
-"""
-Version 1: The Buggy Code
-BUG: ข้อความทักทายผิด (ใช้ "Hi" แทน "Hello")
-"""
 def greet(name):
-    
-    return f"Hi, {name}!" 
+    if name == "Bob":
+        return f"Hello, {name}!"
+    else:
+        return f"Hi, {name}!"
