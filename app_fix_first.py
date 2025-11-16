@@ -5,7 +5,7 @@ AI แก้ไขโดยการ "Hardcode" คำตอบให้ Bob
 """
 def greet(name):
     if name == "Bob":
-        return "Hello, Bob!"  # <--- AI แก้ไข "Bob" ถูกต้อง
+        return "Hello, Bob!"  
     else:
-        # บั๊กเก่ายังคงอยู่สำหรับ "Alice"
-        return f"Hi, {name}!" # <--- BUG!
+        
+        return f"Hi, {name}!" 

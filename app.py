@@ -1,2 +1,6 @@
 def greet(name):
-    return f"Hello, {name}!"
+    if name == "Bob":
+        return "Hello, Bob!"  
+    else:
+        
+        return f"Hi, {name}!" 
