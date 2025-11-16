@@ -27,7 +27,7 @@ jobs:
       # ขั้นตอนนี้จะ "พัง" 🔴 ถ้า Sonar ตรวจเจอ "Code Smell" (v2)
       # และจะ "ผ่าน" 🟢 ถ้าโค้ด "สะอาด" (v3)
       - name: 3. (Validation) SonarCloud Scan [Reusable]
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
