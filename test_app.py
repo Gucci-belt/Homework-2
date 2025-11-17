@@ -1,6 +1,6 @@
 """
 ไฟล์ทดสอบ (Unit Test) สำหรับ Greeting API
-ไฟล์นี้คือ "ผู้คุมกฎ" ที่เราจะไม่แตะต้องอีกเลย
+
 """
 import unittest
 import app  
